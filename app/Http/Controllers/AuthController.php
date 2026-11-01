@@ -36,7 +36,12 @@ class AuthController extends Controller
         if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect('/dashboard');
+            return match (auth()->user()->role) {
+                'pelapor' => redirect('/dashboard/pelapor'),
+                'relawan' => redirect('/dashboard/relawan'),
+                'koordinator' => redirect('/dashboard/koordinator'),
+                default => abort(403, 'Role pengguna tidak dikenali.'),
+            };
         }
 
         return back()

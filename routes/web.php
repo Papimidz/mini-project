@@ -24,6 +24,17 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('/pelapor', function () {
+        return view('dashboard.pelapor');
+    })->middleware('role:pelapor')->name('dashboard.pelapor');
+
+    Route::get('/relawan', function () {
+        return view('dashboard.relawan');
+    })->middleware('role:relawan')->name('dashboard.relawan');
+
+    Route::get('/koordinator', function () {
+        return view('dashboard.koordinator');
+    })->middleware('role:koordinator')->name('dashboard.koordinator');
+});
