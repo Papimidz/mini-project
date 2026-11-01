@@ -15,6 +15,12 @@
     <br>
     <a href="{{ route('fire-reports.create') }}">Buat Laporan</a>
 
+    <p>
+        <a href="{{ route('report-reviews.index') }}">
+            Peninjauan Laporan
+        </a>
+    </p>
+
     <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit">Logout</button>
