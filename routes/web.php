@@ -6,6 +6,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\FireReportController;
 use App\Http\Controllers\ReportReviewController;
 use App\Http\Controllers\ReportStatusController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -38,9 +39,9 @@ Route::post('/logout', [AuthController::class, 'logout'])
         return view('dashboard.relawan');
     })->middleware('role:relawan')->name('dashboard.relawan');
 
-    Route::get('/koordinator', function () {
-        return view('dashboard.koordinator');
-    })->middleware('role:koordinator')->name('dashboard.koordinator');
+    Route::get('/koordinator', [DashboardController::class, 'index'])
+        ->middleware('role:koordinator')
+        ->name('dashboard.koordinator');
 
     Route::get('/areas', [AreaController::class, 'index'])
         ->middleware('role:koordinator')
