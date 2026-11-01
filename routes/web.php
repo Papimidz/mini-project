@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\FireReportController;
 use App\Http\Controllers\ReportReviewController;
+use App\Http\Controllers\ReportStatusController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -74,13 +75,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/fire-reports', [FireReportController::class, 'store'])
         ->name('fire-reports.store');
 });
-Route::middleware(['auth', 'role:relawan'])->group(function () {
+Route::middleware(['auth', 'role:relawan,koordinator'])->group(function () {
     Route::get('/report-reviews', [ReportReviewController::class, 'index'])
         ->name('report-reviews.index');
 
     Route::get('/report-reviews/{fireReport}', [ReportReviewController::class, 'show'])
         ->name('report-reviews.show');
+});
 
+Route::middleware(['auth', 'role:relawan'])->group(function () {
     Route::post('/report-reviews/{fireReport}', [ReportReviewController::class, 'store'])
         ->name('report-reviews.store');
+});
+Route::middleware('auth')->group(function () {
+    Route::patch('/fire-reports/{fireReport}/status', [ReportStatusController::class, 'update'])
+        ->name('fire-reports.status.update');
 });

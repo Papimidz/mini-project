@@ -26,6 +26,9 @@ class ReportReviewController extends Controller
 
     public function store(Request $request, FireReport $fireReport)
     {
+        if ($fireReport->status !== 'menunggu_peninjauan') {
+            abort(403, 'Laporan sudah tidak dapat ditinjau.');
+        }
         $validated = $request->validate([
             'note' => 'required|string',
         ]);
