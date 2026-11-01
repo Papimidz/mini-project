@@ -8,15 +8,60 @@ use Illuminate\Http\Request;
 
 class FireReportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $reports = FireReport::with(['user', 'area'])
-            ->latest()
-            ->paginate(10);
+        $query = FireReport::with(['user', 'area']);
 
-        return view('fire-reports.index', compact('reports'));
+        if (auth()->user()->role === 'pelapor') {
+            $query->where('user_id', auth()->id());
+        }
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('area_id')) {
+            $query->where('area_id', $request->area_id);
+        }
+
+        if ($request->filled('condition_level')) {
+            $query->where('condition_level', $request->condition_level);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $reports = $query->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        $areas = Area::orderBy('name')->get();
+
+        return view('fire-reports.index', compact('reports', 'areas'));
     }
+    public function areaReports(Area $area)
+    {
+        $reports = FireReport::with('user')
+            ->where('area_id', $area->id)
+            ->where('status', '!=', 'selesai')
+            ->latest()
+            ->get();
 
+        return response()->json([
+            'area' => $area->name,
+            'total_reports' => $reports->count(),
+            'reports' => $reports->map(function ($report) {
+                return [
+                    'title' => $report->title,
+                    'reporter' => $report->user->name,
+                    'condition_level' => $report->condition_level,
+                    'status' => $report->status,
+                    'incident_at' => $report->incident_at->format('d-m-Y H:i'),
+                ];
+            }),
+        ]);
+    }
     public function create()
     {
         $areas = Area::orderBy('name')->get();

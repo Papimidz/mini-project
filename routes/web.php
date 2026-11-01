@@ -74,6 +74,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/fire-reports', [FireReportController::class, 'store'])
         ->name('fire-reports.store');
+    Route::get('/fire-reports/area/{area}', [FireReportController::class, 'areaReports'])
+        ->name('fire-reports.area-reports');
 });
 Route::middleware(['auth', 'role:relawan,koordinator'])->group(function () {
     Route::get('/report-reviews', [ReportReviewController::class, 'index'])
