@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\FireReportController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -61,4 +62,14 @@ Route::post('/logout', [AuthController::class, 'logout'])
     Route::delete('/areas/{area}', [AreaController::class, 'destroy'])
         ->middleware('role:koordinator')
         ->name('areas.destroy');
+});
+Route::middleware('auth')->group(function () {
+    Route::get('/fire-reports', [FireReportController::class, 'index'])
+        ->name('fire-reports.index');
+
+    Route::get('/fire-reports/create', [FireReportController::class, 'create'])
+        ->name('fire-reports.create');
+
+    Route::post('/fire-reports', [FireReportController::class, 'store'])
+        ->name('fire-reports.store');
 });

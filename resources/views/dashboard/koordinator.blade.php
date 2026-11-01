@@ -11,6 +11,10 @@
     <p>Selamat datang, {{ auth()->user()->name }}!</p>
     <p>Role: Koordinator Relawan</p>
 
+    <a href="{{ route('fire-reports.index') }}">Lihat Daftar Laporan</a>
+    <br>
+    <a href="{{ route('fire-reports.create') }}">Buat Laporan</a>
+
     <a href="{{ route('areas.index') }}">Kelola Wilayah</a>
 
     <form action="{{ route('logout') }}" method="POST">

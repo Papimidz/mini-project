@@ -11,6 +11,10 @@
     <p>Selamat datang, {{ auth()->user()->name }}!</p>
     <p>Role: Pelapor</p>
 
+    <a href="{{ route('fire-reports.index') }}">Lihat Daftar Laporan</a>
+    <br>
+    <a href="{{ route('fire-reports.create') }}">Buat Laporan</a>
+
     <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit">Logout</button>
