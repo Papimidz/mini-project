@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AreaController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -25,7 +26,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 
 
-Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/pelapor', function () {
         return view('dashboard.pelapor');
     })->middleware('role:pelapor')->name('dashboard.pelapor');
@@ -37,4 +38,27 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/koordinator', function () {
         return view('dashboard.koordinator');
     })->middleware('role:koordinator')->name('dashboard.koordinator');
+
+    Route::get('/areas', [AreaController::class, 'index'])
+        ->middleware('role:koordinator')
+        ->name('areas.index');
+
+    Route::get('/areas/create', [AreaController::class, 'create'])
+        ->middleware('role:koordinator')
+        ->name('areas.create');
+
+    Route::post('/areas', [AreaController::class, 'store'])
+        ->middleware('role:koordinator')
+        ->name('areas.store');
+    Route::get('/areas/{area}/edit', [AreaController::class, 'edit'])
+        ->middleware('role:koordinator')
+        ->name('areas.edit');
+
+    Route::put('/areas/{area}', [AreaController::class, 'update'])
+        ->middleware('role:koordinator')
+        ->name('areas.update');
+
+    Route::delete('/areas/{area}', [AreaController::class, 'destroy'])
+        ->middleware('role:koordinator')
+        ->name('areas.destroy');
 });

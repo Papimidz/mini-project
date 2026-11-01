@@ -11,6 +11,8 @@
     <p>Selamat datang, {{ auth()->user()->name }}!</p>
     <p>Role: Koordinator Relawan</p>
 
+    <a href="{{ route('areas.index') }}">Kelola Wilayah</a>
+
     <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit">Logout</button>
